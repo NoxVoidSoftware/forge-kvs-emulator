@@ -1,0 +1,30 @@
+modules:
+  function:
+    - key: main
+      handler: index.handler
+app:
+  id: ari:cloud:ecosystem::app/00000000-0000-0000-0000-000000000000
+  storage:
+    entities:
+      - name: order
+        attributes:
+          customerId: { type: string }
+          status: { type: string }
+          total: { type: float }
+          quantity: { type: integer }
+          paid: { type: boolean }
+          tags: { type: any }
+          note: { type: string }
+          createdAt: { type: string }
+          rev: { type: integer }
+        indexes:
+          - status
+          - name: by-customer
+            partition: [customerId]
+            range: [createdAt]
+          - name: by-customer-status
+            partition: [customerId, status]
+            range: [createdAt]
+      - name: audit-log
+        attributes:
+          message: { type: string }
